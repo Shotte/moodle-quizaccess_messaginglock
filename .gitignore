@@ -1,0 +1,18 @@
+# Environment and secrets
+.env
+.env.local
+*.key
+*.pem
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+
+# Local runtime noise
+/vendor/
+/node_modules/
+/coverage/
+/.phpunit.result.cache
+*.local.md

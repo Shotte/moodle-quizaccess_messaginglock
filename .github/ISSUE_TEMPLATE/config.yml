@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/Shotte/moodle-quizaccess_messaginglock/security/advisories/new
+    about: Please report security issues privately, not as a public issue.
+  - name: Moodle core issues
+    url: https://moodle.atlassian.net/
+    about: Problems in Moodle itself belong in the Moodle tracker.

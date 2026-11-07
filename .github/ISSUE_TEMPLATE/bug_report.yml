@@ -1,0 +1,57 @@
+name: Bug report
+description: Something does not work as documented.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not report security issues here. See SECURITY.md for private reporting.
+        Please check docs/known-limitations.md first.
+  - type: input
+    id: plugin
+    attributes:
+      label: Plugin version
+      description: Site administration > Plugins > Plugins overview, for example 1.0.0 (2026110701).
+    validations:
+      required: true
+  - type: input
+    id: moodle
+    attributes:
+      label: Moodle version
+      placeholder: "5.1.3+ (Build: ...)"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: PHP and database
+      placeholder: "PHP 8.4, PostgreSQL 17"
+    validations:
+      required: true
+  - type: textarea
+    id: quiz
+    attributes:
+      label: Quiz settings
+      description: Time limit, open and close dates, overrides, grace period, and whether the messaging lock is enabled.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include error messages and the output of the scheduled task "Release quiz messaging locks" if relevant. Remove personal data.
+    validations:
+      required: true
