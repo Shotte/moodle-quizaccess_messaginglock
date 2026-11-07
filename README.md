@@ -10,7 +10,7 @@ their quiz attempt. The lock is enforced on the server, so it also applies in a 
 tab, in the Moodle app and through web services. It stays in place after an early submission
 and is lifted automatically once the exam time has ended for everyone who started.
 
-Current release: **1.0.0 (stable)**.
+Current release: **1.0.1 (stable)**.
 
 ## Features
 
@@ -23,7 +23,8 @@ Current release: **1.0.0 (stable)**.
 - Fail-closed: if a lock cannot be set, the student cannot start the attempt.
 - The setting is kept when a quiz is duplicated, backed up and restored, or imported.
   Locks themselves are never copied.
-- English and German user interface. The language follows the Moodle language settings.
+- User interface in English, German, Spanish, French, Portuguese, Italian and Dutch. The language
+  follows the Moodle language settings.
 - Privacy API implemented. The plugin stores quiz settings only.
 
 ## Requirements

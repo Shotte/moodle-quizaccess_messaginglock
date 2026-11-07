@@ -4,6 +4,17 @@ All notable changes to this plugin are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/). The Moodle version number (`$plugin->version`) is
 given in brackets.
 
+## [1.0.1] - 2026-11-07 (2026110702)
+
+### Added
+
+- Spanish (`es`), French (`fr`), Portuguese (`pt`), Italian (`it`) and Dutch (`nl`) translations.
+- English project documentation, contribution guidelines and security policy.
+
+### Changed
+
+- No change to the lock logic, settings or database. Upgrading from 1.0.0 changes no data.
+
 ## [1.0.0] - 2026-11-07 (2026110701)
 
 First stable release.

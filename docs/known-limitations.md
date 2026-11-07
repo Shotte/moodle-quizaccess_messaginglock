@@ -57,5 +57,10 @@ still writing.
 
 ## Language
 
+- Translations other than English and German were prepared by the maintainers and have not yet
+  been reviewed by native-speaking Moodle translators. Corrections are welcome through issues or,
+  once available, through AMOS.
+- `pt` is European Portuguese. Moodle treats Brazilian Portuguese (`pt_br`) as a separate
+  language; sites using `pt_br` see the English strings.
 - The name of the lock role is not translated by Moodle. It is stored in the site language that
   was active when the plugin was installed.

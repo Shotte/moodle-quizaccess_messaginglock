@@ -25,7 +25,7 @@ require_once($CFG->dirroot . '/mod/quiz/mod_form.php');
 require_once($CFG->dirroot . '/mod/quiz/accessrule/messaginglock/rule.php');
 
 /**
- * Language integration (Paket 006): complete and consistent DE/EN files, every used string
+ * Language integration: complete and consistent translations, every used string
  * defined and every defined string used, resolution through Moodle's normal language choice.
  *
  * The CI site has no German core language pack. The resolution tests therefore register
@@ -56,43 +56,103 @@ final class language_test extends \advanced_testcase {
     }
 
     /**
-     * Registers German like an installed language pack (only langconfig.php) for this test.
+     * Translations shipped with the plugin: every folder in lang/ except en.
+     *
+     * @return string[]
      */
-    private function register_german(): void {
+    private function translations(): array {
+        $langs = array_values(array_diff(scandir(__DIR__ . '/../lang'), ['.', '..', 'en']));
+        $this->assertContains('de', $langs);
+        return $langs;
+    }
+
+    /**
+     * Registers a language like an installed language pack (only langconfig.php) for this test.
+     *
+     * @param string $lang
+     */
+    private function register_language(string $lang): void {
         global $CFG;
-        $dir = $CFG->dataroot . '/lang/de';
+        $dir = $CFG->dataroot . '/lang/' . $lang;
         if (!is_dir($dir)) {
             mkdir($dir, $CFG->directorypermissions, true);
         }
-        $langconfig = "<?php\n\$string['thislanguage'] = 'Deutsch';\n\$string['parentlanguage'] = '';\n";
+        $langconfig = "<?php\n\$string['thislanguage'] = '$lang';\n\$string['parentlanguage'] = '';\n";
         file_put_contents($dir . '/langconfig.php', $langconfig);
-        get_string_manager(true);
-        $this->assertTrue(get_string_manager()->translation_exists('de', false));
+        $this->reset_language_caches();
+        $this->assertTrue(get_string_manager()->translation_exists($lang, false));
+    }
+
+    /**
+     * Forgets every cached list of installed languages, without touching the database.
+     *
+     * The list lives in the MUC cache core/langmenu (not cleared by a new string manager) and in
+     * the static property cache of core_user, which validates the language of new users.
+     */
+    private function reset_language_caches(): void {
+        get_string_manager(true)->reset_caches(true);
+        \core_user::reset_caches();
+    }
+
+    /**
+     * Registers German like an installed language pack for this test.
+     */
+    private function register_german(): void {
+        $this->register_language('de');
     }
 
     protected function tearDown(): void {
         global $CFG;
-        @unlink($CFG->dataroot . '/lang/de/langconfig.php');
-        get_string_manager(true);
+        foreach ($this->translations() as $lang) {
+            @unlink($CFG->dataroot . '/lang/' . $lang . '/langconfig.php');
+        }
+        $this->reset_language_caches();
         parent::tearDown();
     }
 
     /**
-     * Both files define the same keys, in Moodle's sorted order, with the same placeholders, none empty.
+     * Every translation defines the same keys as English, in Moodle's sorted order, with the same
+     * placeholders and help-text bullets, none empty.
      */
     public function test_language_files_complete_and_consistent(): void {
         $en = $this->strings('en');
-        $de = $this->strings('de');
-        $this->assertSame(array_keys($en), array_keys($de));
         $sorted = array_keys($en);
         sort($sorted);
         $this->assertSame($sorted, array_keys($en), 'keys in alphabetical order (Moodle convention)');
-        foreach ($en as $key => $text) {
-            $this->assertNotSame('', trim($text), "en/$key");
-            $this->assertNotSame('', trim($de[$key]), "de/$key");
-            preg_match_all('/\{\$a(->\w+)?\}/', $text, $enph);
-            preg_match_all('/\{\$a(->\w+)?\}/', $de[$key], $deph);
-            $this->assertSame($enph[0], $deph[0], "placeholders of $key");
+        foreach ($this->translations() as $lang) {
+            $tr = $this->strings($lang);
+            $this->assertSame(array_keys($en), array_keys($tr), "keys of $lang");
+            foreach ($en as $key => $text) {
+                $this->assertNotSame('', trim($text), "en/$key");
+                $this->assertNotSame('', trim($tr[$key]), "$lang/$key");
+                preg_match_all('/\{\$a(->\w+)?\}/', $text, $enph);
+                preg_match_all('/\{\$a(->\w+)?\}/', $tr[$key], $trph);
+                $this->assertSame($enph[0], $trph[0], "placeholders of $lang/$key");
+                $this->assertSame(substr_count($text, "\n* "), substr_count($tr[$key], "\n* "), "bullets of $lang/$key");
+            }
+        }
+    }
+
+    /**
+     * Each shipped translation is served through Moodle's normal language choice, and saving a
+     * setting in that language stores the same value.
+     */
+    public function test_every_translation_resolves(): void {
+        $this->resetAfterTest();
+        $course = $this->getDataGenerator()->create_course();
+        foreach ($this->translations() as $lang) {
+            $this->register_language($lang);
+            $this->setUser($this->getDataGenerator()->create_user(['lang' => $lang]));
+            $this->assertSame($lang, current_language());
+            $tr = $this->strings($lang);
+            foreach (['messaginglockenabled', 'messaginglockenabled_help', 'studentinfo', 'lockfailed'] as $key) {
+                $this->assertSame($tr[$key], get_string($key, self::COMPONENT), "$lang/$key");
+            }
+            $expected = str_replace('{$a}', '3', $tr['taskreleaselocksdone']);
+            $this->assertSame($expected, get_string('taskreleaselocksdone', self::COMPONENT, 3), "$lang placeholder");
+            $quiz = $this->getDataGenerator()->get_plugin_generator('mod_quiz')
+                ->create_instance(['course' => $course->id, 'messaginglockenabled' => 1]);
+            $this->assertTrue(lock_manager::is_enabled($quiz->id), $lang);
         }
     }
 

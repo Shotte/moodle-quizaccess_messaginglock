@@ -52,8 +52,15 @@ retried in the next run; other quizzes are not affected.
 
 ## Languages
 
-The plugin ships English and German strings. Moodle selects the language from the user's and
-site's language settings. There is no plugin-specific language setting.
+The plugin ships strings in English (`en`), German (`de`), Spanish (`es`), French (`fr`),
+Portuguese (`pt`), Italian (`it`) and Dutch (`nl`). Moodle selects the language from the user's
+and site's language settings. There is no plugin-specific language setting, and the stored quiz
+settings do not depend on the language.
+
+A translation is only shown if the corresponding Moodle language pack is installed on the site.
+If a Moodle language pack contains a translation of this plugin (from
+[AMOS](https://lang.moodle.org/)), Moodle uses it in preference to the strings shipped with the
+plugin.
 
 Known limitation: the name of the lock role is not translated by Moodle and is shown in the
 site language that was active at installation.
