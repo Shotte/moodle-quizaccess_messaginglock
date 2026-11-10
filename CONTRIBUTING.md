@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for your interest in improving Moodle Quiz Messaging Lock.
+Thank you for your interest in improving Quiz Messaging Lock.
 
 ## How changes are accepted
 
@@ -39,7 +39,8 @@ The design rules are:
 - Every PHP file has the standard Moodle GPL boilerplate, `@package quizaccess_messaginglock`,
   `@copyright` and `@license` tags.
 - Add or update PHPUnit tests for every change in behaviour. Tests live in `tests/`.
-- Keep `lang/en` and `lang/de` consistent: every string key exists in both files.
+- Only `lang/en` ships with the plugin. Keep the translations in `tests/fixtures/lang` consistent
+  with it: every string key exists in every file (checked by `tests/language_test.php`).
 - The code must work on all supported Moodle versions (see
   [docs/compatibility.md](docs/compatibility.md)) without version switches.
 
@@ -49,9 +50,10 @@ You can run the checks locally with
 
 ## Translations
 
-English (`lang/en`) is the source language. German (`lang/de`) is maintained in this repository.
-Once the plugin is listed in the Moodle plugins directory, further translations should be
-contributed through [AMOS](https://lang.moodle.org/).
+English (`lang/en`) is the source language and the only language shipped with the plugin.
+Translations are contributed through [AMOS](https://lang.moodle.org/). The translations
+prepared up to 1.0.1 (German, Spanish, French, Portuguese, Italian, Dutch) are kept in
+`tests/fixtures/lang` for the AMOS submission.
 
 ## Commit messages
 

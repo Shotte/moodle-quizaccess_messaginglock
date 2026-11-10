@@ -1,4 +1,4 @@
-# Moodle Quiz Messaging Lock
+# Quiz Messaging Lock
 
 `quizaccess_messaginglock` is a quiz access rule for Moodle 5.0 to 5.3. It adds one setting to
 the quiz settings form:
@@ -10,7 +10,7 @@ their quiz attempt. The lock is enforced on the server, so it also applies in a 
 tab, in the Moodle app and through web services. It stays in place after an early submission
 and is lifted automatically once the exam time has ended for everyone who started.
 
-Current release: **1.0.1 (stable)**.
+Current release: **1.0.2 (stable)**.
 
 ## Features
 
@@ -23,8 +23,8 @@ Current release: **1.0.1 (stable)**.
 - Fail-closed: if a lock cannot be set, the student cannot start the attempt.
 - The setting is kept when a quiz is duplicated, backed up and restored, or imported.
   Locks themselves are never copied.
-- User interface in English, German, Spanish, French, Portuguese, Italian and Dutch. The language
-  follows the Moodle language settings.
+- English strings ship with the plugin; translations are provided through Moodle language packs
+  ([AMOS](https://lang.moodle.org/)). The language follows the Moodle language settings.
 - Privacy API implemented. The plugin stores quiz settings only.
 
 ## Requirements

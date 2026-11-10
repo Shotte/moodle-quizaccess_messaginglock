@@ -24,9 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026110702;
+$plugin->version   = 2026111000;
 $plugin->requires  = 2025041400; // Moodle 5.0.0.
 $plugin->supported = [500, 503]; // Tested on 5.0 to 5.3, see .forgejo/workflows/ci-full.yml.
 $plugin->component = 'quizaccess_messaginglock';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.0.1';
+$plugin->release   = '1.0.2';

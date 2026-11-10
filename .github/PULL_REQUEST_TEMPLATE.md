@@ -10,7 +10,7 @@
 
 - [ ] The change follows the design rules in CONTRIBUTING.md (no core changes, server-side enforcement, fail-closed).
 - [ ] PHPUnit tests were added or updated for changed behaviour.
-- [ ] `lang/en` and `lang/de` contain the same string keys.
+- [ ] Only `lang/en` ships; `tests/fixtures/lang` defines the same string keys.
 - [ ] Code, comments and this description are in English and follow the Moodle coding style.
 - [ ] I agree that my contribution is licensed under the GNU GPL v3 or later.
 

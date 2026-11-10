@@ -2,16 +2,19 @@
 
 | Item | Value |
 | --- | --- |
-| Plugin version | 1.0.1 (`2026110702`), stable |
+| Plugin version | 1.0.2 (`2026111000`), stable |
 | `$plugin->requires` | `2025041400` (Moodle 5.0.0) |
 | `$plugin->supported` | `[500, 503]` (Moodle 5.0 to 5.3) |
-| Languages | English, German, Spanish, French, Portuguese, Italian, Dutch |
+| Languages | English; translations through Moodle language packs (AMOS) |
 
 One code base serves all supported Moodle versions. There are no version switches in the code.
 Since Moodle 5.1 the Moodle code lives in the `public/` directory; the plugin derives all paths
 from `$CFG->dirroot`.
 
 ## Tested combinations
+
+Release 1.0.2 removes the bundled translations (English only, as required for the Moodle
+Marketplace); the plugin logic is unchanged from 1.0.0.
 
 Release 1.0.1 adds language files and documentation only; the plugin logic is unchanged from 1.0.0.
 It was checked with the full static checks and PHPUnit on Moodle 5.1 / PHP 8.4 / PostgreSQL and

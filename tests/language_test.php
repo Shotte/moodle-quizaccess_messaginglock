@@ -25,13 +25,14 @@ require_once($CFG->dirroot . '/mod/quiz/mod_form.php');
 require_once($CFG->dirroot . '/mod/quiz/accessrule/messaginglock/rule.php');
 
 /**
- * Language integration: complete and consistent translations, every used string
- * defined and every defined string used, resolution through Moodle's normal language choice.
+ * Language integration: only English ships with the plugin, the kept translations are complete
+ * and consistent, every used string is defined and every defined string used, and translations
+ * delivered by a Moodle language pack (AMOS) are served through Moodle's normal language choice.
  *
- * The CI site has no German core language pack. The resolution tests therefore register
- * German with a minimal langconfig.php in the test dataroot: Moodle then serves the plugin's
- * own lang/de strings and falls back to English for core strings such as Yes/No - which is
- * exactly Moodle's fallback for a missing translation.
+ * The translations prepared up to 1.0.1 are kept in tests/fixtures/lang for the AMOS submission.
+ * The resolution tests install one of them like a language pack in the test dataroot (a minimal
+ * langconfig.php plus the plugin's string file). Moodle then serves those strings and falls back
+ * to English for core strings such as Yes/No - exactly Moodle's fallback for a missing translation.
  *
  * @package    quizaccess_messaginglock
  * @category   test
@@ -43,31 +44,35 @@ final class language_test extends \advanced_testcase {
     /** @var string Component. */
     private const COMPONENT = 'quizaccess_messaginglock';
 
+    /** @var string Kept translations (not shipped), one folder per language like a language pack. */
+    private const TRANSLATIONS = __DIR__ . '/fixtures/lang';
+
     /**
-     * Reads a language file of the plugin directly, independent of installed packs.
+     * Reads a string file directly: English from the plugin, other languages from the kept translations.
      *
      * @param string $lang
      * @return array
      */
     private function strings(string $lang): array {
         $string = [];
-        include(__DIR__ . "/../lang/$lang/" . self::COMPONENT . '.php');
+        include(($lang === 'en' ? __DIR__ . '/../lang' : self::TRANSLATIONS) . "/$lang/" . self::COMPONENT . '.php');
         return $string;
     }
 
     /**
-     * Translations shipped with the plugin: every folder in lang/ except en.
+     * Kept translations: every folder in tests/fixtures/lang.
      *
      * @return string[]
      */
     private function translations(): array {
-        $langs = array_values(array_diff(scandir(__DIR__ . '/../lang'), ['.', '..', 'en']));
+        $langs = array_values(array_diff(scandir(self::TRANSLATIONS), ['.', '..']));
         $this->assertContains('de', $langs);
         return $langs;
     }
 
     /**
-     * Registers a language like an installed language pack (only langconfig.php) for this test.
+     * Installs a language like a Moodle language pack from AMOS for this test: langconfig.php plus
+     * the plugin's translated string file in the dataroot.
      *
      * @param string $lang
      */
@@ -79,6 +84,7 @@ final class language_test extends \advanced_testcase {
         }
         $langconfig = "<?php\n\$string['thislanguage'] = '$lang';\n\$string['parentlanguage'] = '';\n";
         file_put_contents($dir . '/langconfig.php', $langconfig);
+        copy(self::TRANSLATIONS . "/$lang/" . self::COMPONENT . '.php', "$dir/" . self::COMPONENT . '.php');
         $this->reset_language_caches();
         $this->assertTrue(get_string_manager()->translation_exists($lang, false));
     }
@@ -105,9 +111,17 @@ final class language_test extends \advanced_testcase {
         global $CFG;
         foreach ($this->translations() as $lang) {
             @unlink($CFG->dataroot . '/lang/' . $lang . '/langconfig.php');
+            @unlink($CFG->dataroot . '/lang/' . $lang . '/' . self::COMPONENT . '.php');
         }
         $this->reset_language_caches();
         parent::tearDown();
+    }
+
+    /**
+     * Only English strings ship with the plugin (Moodle Marketplace rule); translations come from AMOS.
+     */
+    public function test_only_english_is_shipped(): void {
+        $this->assertSame(['en'], array_values(array_diff(scandir(__DIR__ . '/../lang'), ['.', '..'])));
     }
 
     /**
@@ -134,8 +148,8 @@ final class language_test extends \advanced_testcase {
     }
 
     /**
-     * Each shipped translation is served through Moodle's normal language choice, and saving a
-     * setting in that language stores the same value.
+     * Each kept translation, installed like a language pack, is served through Moodle's normal
+     * language choice, and saving a setting in that language stores the same value.
      */
     public function test_every_translation_resolves(): void {
         $this->resetAfterTest();

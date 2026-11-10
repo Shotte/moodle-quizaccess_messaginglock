@@ -156,12 +156,12 @@ final class rule_form_test extends \advanced_testcase {
         $this->assertStringContainsString('early submission', $help);
 
         // Read the files directly: the CI site has no German language pack, so the string manager would fall back to English.
-        $dir = __DIR__ . '/../lang';
+        // German is no longer shipped; it is kept in tests/fixtures/lang for AMOS.
         $string = [];
-        include($dir . '/de/quizaccess_messaginglock.php');
+        include(__DIR__ . '/fixtures/lang/de/quizaccess_messaginglock.php');
         $de = $string;
         $string = [];
-        include($dir . '/en/quizaccess_messaginglock.php');
+        include(__DIR__ . '/../lang/en/quizaccess_messaginglock.php');
         $en = $string;
         $this->assertSame(array_keys($en), array_keys($de), 'German and English define the same strings');
         $this->assertStringContainsString('vorzeitigen Testabgabe', $de['messaginglockenabled_help']);

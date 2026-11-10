@@ -4,6 +4,18 @@ All notable changes to this plugin are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/). The Moodle version number (`$plugin->version`) is
 given in brackets.
 
+## [1.0.2] - unreleased (2026111000)
+
+### Changed
+
+- Only English strings ship with the plugin, as required for the Moodle Marketplace.
+  Translations are provided through the Moodle language packs (AMOS). The German, Spanish,
+  French, Portuguese, Italian and Dutch strings of 1.0.1 are kept in the repository
+  (`tests/fixtures/lang`) for the AMOS submission.
+- Product name "Quiz Messaging Lock".
+- No change to the lock logic, settings or database. See the upgrade notes in
+  `docs/installation.md` if your site uses one of the removed languages.
+
 ## [1.0.1] - 2026-11-07 (2026110702)
 
 ### Added
