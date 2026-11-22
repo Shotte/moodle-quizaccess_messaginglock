@@ -4,7 +4,16 @@ All notable changes to this plugin are documented in this file. Versions follow
 [Semantic Versioning](https://semver.org/). The Moodle version number (`$plugin->version`) is
 given in brackets.
 
-## [1.0.2] - unreleased (2026111000)
+## [1.0.3] (2026112200)
+
+### Fixed
+
+- The installation package now contains the GPL-3.0 licence file (`LICENSE`) in the plugin root,
+  as required for the Moodle Plugins directory.
+- No other change: lock logic, settings, database, roles, user interface and strings are
+  identical to 1.0.2.
+
+## [1.0.2] - 2026-11-10 (2026111000)
 
 ### Changed
 
